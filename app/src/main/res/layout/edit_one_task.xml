@@ -8,48 +8,51 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
+            android:id="@+id/etTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
             android:ems="10"
             android:inputType="textPersonName"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4"
-            tools:text="Description" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+            app:layout_constraintEnd_toStartOf="@+id/btSave"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Title" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/btSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName4"
+            app:layout_constraintTop_toTopOf="@+id/etTitle"
             app:srcCompat="@android:drawable/ic_menu_save" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/btDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton2"
+            app:layout_constraintTop_toBottomOf="@+id/btSave"
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            app:layout_constraintEnd_toStartOf="@+id/btDelete"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etTitle"
+            tools:text="Description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
