@@ -1,9 +1,13 @@
 package br.edu.ifpr.josepher.trabalhoroomsqliterecyclerview.adapters
 
 import android.content.Context
+import android.graphics.Color.GREEN
+import android.graphics.Color.RED
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import br.edu.ifpr.josepher.trabalhoroomsqliterecyclerview.R
@@ -21,7 +25,6 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
         taskEditing=task
         tasks.add(0, task)
         notifyItemInserted(0)
-
     }
 
     fun addTaskChange(task: Task): Int {
@@ -52,12 +55,14 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun fillView(task: Task){
+            var mycard = itemView as CardView
+
             if (task == taskEditing){
                 itemView.etTitle.setText(task.title)
                 itemView.etDescription.setText(task.description)
 
                 itemView.btSave.setOnClickListener{
-                    if(taskEditing != null){
+                    if(taskEditing != null && taskEditing!!.id == 0L){
                         task.title = itemView.etTitle.text.toString()
                         task.description = itemView.etDescription.text.toString()
                         task.status = false
@@ -67,8 +72,9 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
                         }
                         notifyItemInserted(tasks.indexOf(task))
                     }else{
+
                         task.title = itemView.etTitle.text.toString()
-                        task.description = itemView.etTitle.text.toString()
+                        task.description = itemView.etDescription.text.toString()
 
                         with(this@TaskAdapter){
                             listener.taskChange(task)
@@ -76,13 +82,37 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
                         notifyItemChanged(tasks.indexOf(task))
                     }
                 }
+                itemView.btDelete.setOnClickListener {
+                    if(taskEditing != null && taskEditing!!.id == 0L) {
+                        taskEditing = null
+                        notifyItemRemoved(tasks.indexOf(task))
+                    }else {
+                        with(this@TaskAdapter) {
+                            listener.taskRemoved(task)
+                        }
+                        notifyItemRemoved(tasks.indexOf(task))
+                    }
+                }
             }else{
                 itemView.tvTitle.text = task.title
-//                var mycard =itemView as C
+
+                if(task.status){
+                    mycard.setCardBackgroundColor(GREEN)
+                }else{
+                    mycard.setCardBackgroundColor(RED)
+                }
 
                 itemView.setOnClickListener{
                     taskEditing = task
                     notifyItemChanged(tasks.indexOf(task))
+                }
+
+                itemView.setOnLongClickListener {
+                    task.status = !task.status
+
+                    listener.taskChange(task)
+                    notifyItemChanged(tasks.indexOf(task))
+                    true
                 }
             }
         }

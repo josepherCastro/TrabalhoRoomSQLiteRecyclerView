@@ -15,21 +15,30 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() , TaskAdapterListener{
     private lateinit var adapter: TaskAdapter
     private lateinit var dao: TaskDao
-
+    private var flag = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "tasks-db")
             .allowMainThreadQueries()
             .build()
         dao = db.taskDao()
 
-
         fab_AddTask.setOnClickListener{
-            val task = Task("","", false)
-            adapter.addTask(task)
+            //if(!flag) {
+                val task = Task("", "", false)
+                task.id = 0L
+                adapter.addTask(task)
+              //  flag = true
+            //}
         }
+        loadData()
+    }
+
+    override fun taskRemoved(task: Task) {
+        dao.delete(task)
         loadData()
     }
 
@@ -40,6 +49,7 @@ class MainActivity : AppCompatActivity() , TaskAdapterListener{
     }
 
     override fun taskSave(task: Task) {
+//        flag = false
         dao.insert(task)
         loadData()
     }
