@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btShare"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Title" />
+            android:hint="@string/title_task" />
 
         <ImageButton
             android:id="@+id/btShare"

@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btSave"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Title" />
+            android:hint="@string/title_task"/>
 
         <ImageButton
             android:id="@+id/btSave"
@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btDelete"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etTitle"
-            tools:text="Description" />
+            android:hint="@string/description_task"/> />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

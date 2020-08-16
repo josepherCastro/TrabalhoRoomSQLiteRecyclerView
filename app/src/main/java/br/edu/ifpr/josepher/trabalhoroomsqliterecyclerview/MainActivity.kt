@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() , TaskAdapterListener{
     private lateinit var adapter: TaskAdapter
     private lateinit var dao: TaskDao
-    private val subject = "Tarefa Feita"
-    private val textExtra = "Olha Só! Acabei de Concluir: "
     private var removeFromList = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,11 +56,13 @@ class MainActivity : AppCompatActivity() , TaskAdapterListener{
     }
 
     override fun share(task: Task) {
+        val subject: String = getString(R.string.subject)
+        val  textExtra = "${getString(R.string.text_extra)} ${task.title}"
         val share = Intent(Intent.ACTION_SEND)
         with(share){
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, subject)
-            putExtra(Intent.EXTRA_TEXT, textExtra+task.title)
+            putExtra(Intent.EXTRA_TEXT,  textExtra)
         }
         startActivity(share)
     }
