@@ -1,5 +1,6 @@
 package br.edu.ifpr.josepher.trabalhoroomsqliterecyclerview
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +16,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() , TaskAdapterListener{
     private lateinit var adapter: TaskAdapter
     private lateinit var dao: TaskDao
-    private var flag = false
+    private val subject = "Tarefa Feita"
+    private val textExtra = "Olha Só! Acabei de Concluir: "
+    private var removeFromList = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "tasks-db")
             .allowMainThreadQueries()
@@ -27,29 +30,24 @@ class MainActivity : AppCompatActivity() , TaskAdapterListener{
         dao = db.taskDao()
 
         fab_AddTask.setOnClickListener{
-            //if(!flag) {
+            if (!removeFromList) {
+                enableRemoveFromList(true)
                 val task = Task("", "", false)
                 task.id = 0L
                 adapter.addTask(task)
-              //  flag = true
-            //}
+            }
         }
         loadData()
     }
 
     override fun taskRemoved(task: Task) {
+        enableRemoveFromList(false)
         dao.delete(task)
         loadData()
     }
 
-
-    override fun onTaskSelected(task: Task) {
-        val position = adapter.addTaskChange(task)
-        rc_tasks.scrollToPosition(position)
-    }
-
     override fun taskSave(task: Task) {
-//        flag = false
+        enableRemoveFromList(false)
         dao.insert(task)
         loadData()
     }
@@ -57,6 +55,20 @@ class MainActivity : AppCompatActivity() , TaskAdapterListener{
     override fun taskChange(task: Task) {
         dao.update(task)
         loadData()
+    }
+
+    override fun share(task: Task) {
+        val share = Intent(Intent.ACTION_SEND)
+        with(share){
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, textExtra+task.title)
+        }
+        startActivity(share)
+    }
+
+    override fun enableRemoveFromList(flag: Boolean) {
+        removeFromList = flag
     }
 
     private fun loadData(){

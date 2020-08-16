@@ -1,8 +1,7 @@
 package br.edu.ifpr.josepher.trabalhoroomsqliterecyclerview.adapters
 
 import android.content.Context
-import android.graphics.Color.GREEN
-import android.graphics.Color.RED
+import android.graphics.Color.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,13 +24,6 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
         taskEditing=task
         tasks.add(0, task)
         notifyItemInserted(0)
-    }
-
-    fun addTaskChange(task: Task): Int {
-//            taskEditing=task
-        tasks.add(0, task)
-        notifyItemInserted(0)
-        return 0
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -72,7 +64,6 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
                         }
                         notifyItemInserted(tasks.indexOf(task))
                     }else{
-
                         task.title = itemView.etTitle.text.toString()
                         task.description = itemView.etDescription.text.toString()
 
@@ -85,6 +76,8 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
                 itemView.btDelete.setOnClickListener {
                     if(taskEditing != null && taskEditing!!.id == 0L) {
                         taskEditing = null
+                        listener.enableRemoveFromList(false)
+                        tasks.remove(task)
                         notifyItemRemoved(tasks.indexOf(task))
                     }else {
                         with(this@TaskAdapter) {
@@ -97,16 +90,18 @@ class TaskAdapter(val tasks: MutableList<Task>, val listener: TaskAdapterListene
                 itemView.tvTitle.text = task.title
 
                 if(task.status){
-                    mycard.setCardBackgroundColor(GREEN)
+                    mycard.setCardBackgroundColor(parseColor("#A3BFA8"))
                 }else{
-                    mycard.setCardBackgroundColor(RED)
+                    mycard.setCardBackgroundColor(parseColor("#BE6E46"))
+                    itemView.btShare.visibility = View.INVISIBLE
                 }
-
+                itemView.btShare.setOnClickListener {
+                    listener.share(task)
+                }
                 itemView.setOnClickListener{
                     taskEditing = task
                     notifyItemChanged(tasks.indexOf(task))
                 }
-
                 itemView.setOnLongClickListener {
                     task.status = !task.status
 
